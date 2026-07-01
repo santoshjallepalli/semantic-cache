@@ -13,4 +13,6 @@ public class ChatResponse {
 
     private String response;
 
+    private boolean cacheHit;
+
 }
