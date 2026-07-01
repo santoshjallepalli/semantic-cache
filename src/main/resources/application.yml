@@ -1,0 +1,27 @@
+spring:
+
+  application:
+    name: semantic-cache
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    default_schema: semantic_cache
+    username: postgres
+    password: netcracker
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      format_sql: true
+    show-sql: true
+
+    properties:
+        hibernate:
+          default_schema: semantic_cache
+
+
+  ai:
+    openai:
+      api-key: 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
+
