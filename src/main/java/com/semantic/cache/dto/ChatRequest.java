@@ -7,4 +7,6 @@ public class ChatRequest {
 
     private String prompt;
 
+    private Double threshold;
+
 }

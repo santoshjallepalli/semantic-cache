@@ -4,10 +4,10 @@ spring:
     name: semantic-cache
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=semantic_cache
     default_schema: semantic_cache
     username: postgres
-    password: netcracker
+    password: postgres@123
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -23,7 +23,7 @@ spring:
 
   ai:
     openai:
-      api-key: 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
+      api-key: ${OPEN_AI_API_KEY}
       embedding:
         options:
           model: text-embedding-3-small

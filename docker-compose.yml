@@ -1,25 +1,49 @@
 version: '3.9'
 
 services:
-
-  postgres:
-
-    image: pgvector/pgvector:pg16
-
+  db:
+    image: ankane/pgvector:latest # Postgres + pgvector extension
     container_name: semantic-postgres
-
     restart: always
-
-    ports:
-      - "5432:5432"
-
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: semanticdb
-
+      POSTGRES_PASSWORD: postgres@123
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: semantic-cache-app
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      # Spring profile
+      SPRING_PROFILES_ACTIVE: prod
+
+      # Datasource config
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/postgres?currentSchema=semantic_cache
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres@123
+
+      # (Optional) JPA/Hibernate tuning
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+
+      # (Optional) logging level
+      # LOGGING_LEVEL_ROOT: INFO
 
 volumes:
-  postgres_data:
+  pgdata:

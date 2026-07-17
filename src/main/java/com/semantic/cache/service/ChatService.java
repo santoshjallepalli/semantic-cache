@@ -25,6 +25,7 @@ public class ChatService {
     public ChatResponse chat(ChatRequest request){
 
         String prompt = request.getPrompt();
+        double threshold = (request.getThreshold() == null) ? 0.90d : request.getThreshold();
         System.out.println("prompt = " + prompt);
 
         float[] embedding = embeddingService.generateEmbedding(prompt);
@@ -33,10 +34,9 @@ public class ChatService {
         Optional<SemanticChatCache> semanticCache =
                 semanticSearchRepository.findBestMatch(
                         embedding,
-                        0.90);
+                        threshold);
         System.out.println("semanticCache = " + semanticCache);
         if (semanticCache.isPresent()) {
-
             return ChatResponse.builder()
                     .response(semanticCache.get().getResponse())
                     .cacheHit(true)

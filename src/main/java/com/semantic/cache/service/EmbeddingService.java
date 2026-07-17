@@ -21,7 +21,7 @@ public class EmbeddingService {
                 new EmbeddingRequest(
                         List.of(text),
                         OpenAiEmbeddingOptions.builder()
-                                .withModel("text-embedding-3-small")
+                                .withModel("text-embedding-3-large")
                                 .build()
                 ));
         System.out.println("response = " + response);
